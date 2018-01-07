@@ -1,0 +1,13 @@
+{
+  "name": "DatADSB",
+  "version": "0.1.0",
+  "description": "Tracking planes with ADS-B and serving that information over the Dat protocol",
+  "dependencies": {
+    "dat-node": "^3.5.6",
+    "mode-s-aircraft-store": "^1.0.0",
+    "mode-s-demodulator": "^1.0.0",
+    "rtl-sdr": "^0.1.2"
+  },
+  "author": "Ryan Oles (https://twitter.com/rh0)",
+  "license": "MIT"
+}
