@@ -6,14 +6,6 @@ var Dat = require('dat-node')
 
 var dataFolder = 'flight_data'
 
-Dat(dataFolder, function(err, dat) {
-  if(err) throw err
-
-  dat.joinNetwork()
-  dat.importFiles({watch: true})
-  console.log('Serving dat://'+dat.key.toString('hex'))
-})
-
 const store = new AircraftStore({
   timeout: 120000 // 2 mins
 })
@@ -98,16 +90,24 @@ function onData (data, size) {
   })
 }
 
-setInterval(function() {
-  store.getAircrafts().filter(function(aircraft) {
-    return aircraft.lat
-  })
-  .forEach(function(aircraft) {
-    fs.writeFile(dataFolder + '/' + aircraft.icao + '.json', JSON.stringify(aircraft), function(err) {
-      if(err) throw err
+Dat(dataFolder, {indexing: false}, function(err, dat) {
+  if(err) throw err
+
+  dat.joinNetwork()
+  dat.importFiles({watch: true})
+  console.log('Serving dat://'+dat.key.toString('hex'))
+
+  setInterval(function() {
+    store.getAircrafts().filter(function(aircraft) {
+      return aircraft.lat
     })
-  })
-}, 3000)
+    .forEach(function(aircraft) {
+      dat.archive.writeFile(aircraft.icao + '.json', JSON.stringify(aircraft), function(err) {
+        if(err) throw err
+      })
+    })
+  }, 3000)
+})
 
 function onEnd() {
   console.log('onEnd')
