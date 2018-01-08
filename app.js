@@ -94,7 +94,6 @@ Dat(dataFolder, {indexing: false}, function(err, dat) {
   if(err) throw err
 
   dat.joinNetwork()
-  dat.importFiles({watch: true})
   console.log('Serving dat://'+dat.key.toString('hex'))
 
   setInterval(function() {
