@@ -96,6 +96,18 @@ Dat(dataFolder, {indexing: false}, function(err, dat) {
   dat.joinNetwork()
   console.log('Serving dat://'+dat.key.toString('hex'))
 
+  console.log('Cleaning up Legacy Files')
+  dat.archive.readdir('/', function(err, files) {
+    if(err) throw err
+
+    files.forEach(function(legacyFile) {
+      dat.archive.unlink(legacyFile, function(err) {
+        if(err) throw err
+      })
+    })
+    console.log('%d files removed', files.length)
+  })
+
   setInterval(function() {
     store.getAircrafts().filter(function(aircraft) {
       return aircraft.lat
