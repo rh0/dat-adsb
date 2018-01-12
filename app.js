@@ -1,10 +1,25 @@
 const rtlsdr = require('rtl-sdr')
 const Demodulator = require('mode-s-demodulator')
 const AircraftStore = require('mode-s-aircraft-store')
+const EventEmitter = require('events')
 const fs = require('fs')
-var Dat = require('dat-node')
+const Dat = require('dat-node')
 
-var dataFolder = 'flight_data'
+const dataFolder = 'flight_data'
+
+const storeEmitter = new EventEmitter();
+
+AircraftStore.prototype._prune = function () {
+  const self = this
+  const threshold = Date.now() - this._timeout
+  Object.keys(this._index).forEach(function (icao) {
+    const aircraft = self._index[icao]
+    if (aircraft.seen < threshold) {
+      delete self._index[icao]
+      storeEmitter.emit('aircraftTimeout', icao)
+    }
+  })
+}
 
 const store = new AircraftStore({
   timeout: 120000 // 2 mins
@@ -118,6 +133,13 @@ Dat(dataFolder, {indexing: false}, function(err, dat) {
       })
     })
   }, 3000)
+
+  storeEmitter.on('aircraftTimeout', function(icao) {
+    dat.archive.unlink(icao + '.json', function(err) {
+      // Expect some icao's to not be found as we arn't logging them all.
+      if(err && err.status != 404) throw err
+    })
+  })
 })
 
 function onEnd() {
