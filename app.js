@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const Dat = require('dat-node')
 const debug = require('debug')('dat-adsb')
 const rtlsdr = require('./lib/rtlsdr')
