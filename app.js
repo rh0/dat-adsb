@@ -2,8 +2,11 @@ const Dat = require('dat-node')
 const debug = require('debug')('dat-adsb')
 const rtlsdr = require('./lib/rtlsdr')
 const storeEmitter = require('./lib/store').storeEmitter
+const store = require('./lib/store').store
 
 const dataFolder = 'flight_data'
+
+rtlsdr.start()
 
 Dat(dataFolder, {indexing: false}, function(err, dat) {
   if(err) throw err
