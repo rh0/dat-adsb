@@ -2,7 +2,6 @@ const rtlsdr = require('rtl-sdr')
 const Demodulator = require('mode-s-demodulator')
 const AircraftStore = require('mode-s-aircraft-store')
 const EventEmitter = require('events')
-const fs = require('fs')
 const Dat = require('dat-node')
 
 const dataFolder = 'flight_data'
