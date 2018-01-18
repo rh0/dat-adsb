@@ -1,7 +1,7 @@
 const Dat = require('dat-node')
+const debug = require('debug')('dat-adsb')
 const rtlsdr = require('./lib/rtlsdr')
 const storeEmitter = require('./lib/store').storeEmitter
-
 
 const dataFolder = 'flight_data'
 
@@ -9,9 +9,9 @@ Dat(dataFolder, {indexing: false}, function(err, dat) {
   if(err) throw err
 
   dat.joinNetwork()
-  console.log('Serving dat://'+dat.key.toString('hex'))
+  debug('Serving dat://'+dat.key.toString('hex'))
 
-  console.log('Cleaning up Legacy Files')
+  debug('Cleaning up Legacy Files')
   dat.archive.readdir('/', function(err, files) {
     if(err) throw err
 
@@ -20,7 +20,7 @@ Dat(dataFolder, {indexing: false}, function(err, dat) {
         if(err) throw err
       })
     })
-    console.log('%d files removed', files.length)
+    debug('%d files removed', files.length)
   })
 
   setInterval(function() {
