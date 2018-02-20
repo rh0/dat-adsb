@@ -32,8 +32,23 @@ Dat(dataFolder, {indexing: false, latest:true, sparse: true}, function(err, dat)
       return aircraft.lat
     })
     .forEach(function(aircraft) {
-      dat.archive.writeFile(aircraft.icao + '.json', JSON.stringify(aircraft), function(err) {
-        if(err) throw err
+      dat.archive.readFile(aircraft.icao + '.json', 'utf8', (err, data) => {
+        if (err) {
+          if (err.notFound === true) {
+            dat.archive.writeFile(aircraft.icao + '.json', JSON.stringify(aircraft), function(err) {
+              if(err) throw err
+            })
+          }
+          else throw err
+        }
+        else {
+          var prevRecord = JSON.parse(data)
+          if(prevRecord.lat != aircraft.lat && prevRecord.lng != aircraft.lng) {
+            dat.archive.writeFile(aircraft.icao + '.json', JSON.stringify(aircraft), function(err) {
+              if(err) throw err
+            })
+          }
+        }
       })
     })
   }, 3000)
