@@ -9,7 +9,7 @@ const dataFolder = 'flight_data'
 
 rtlsdr.start()
 
-Dat(dataFolder, {indexing: false}, function(err, dat) {
+Dat(dataFolder, {indexing: false, latest:true, sparse: true}, function(err, dat) {
   if(err) throw err
 
   dat.joinNetwork()
