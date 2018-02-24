@@ -27,6 +27,14 @@ Dat(dataFolder, {indexing: false, latest:true, sparse: true}, function(err, dat)
       }
       else throw err
     }
+    else {
+      station.radio = rtlsdr.stat();
+      if(file != JSON.stringify(station)) {
+        dat.archive.writeFile('station.json', JSON.stringify(station), function(err) {
+          if(err) throw err
+        })
+      }
+    }
   })
 
   dat.archive.readdir('/' + flightFolder, function(err, files) {
