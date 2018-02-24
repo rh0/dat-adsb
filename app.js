@@ -20,6 +20,7 @@ Dat(dataFolder, {indexing: false, latest:true, sparse: true}, function(err, dat)
   dat.archive.readFile('station.json', function(err, file) {
     if(err) {
       if(err.notFound) {
+        station.radio = rtlsdr.stat();
         dat.archive.writeFile('station.json', JSON.stringify(station), function(err) {
           if(err) throw err
         })
