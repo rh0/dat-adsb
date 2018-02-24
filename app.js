@@ -4,8 +4,10 @@ const Dat = require('dat-node')
 const rtlsdr = require('./lib/rtlsdr')
 const storeEmitter = require('./lib/store').storeEmitter
 const store = require('./lib/store').store
+const station = require('./package').station
 
-const dataFolder = 'flight_data'
+const dataFolder = 'station'
+const flightFolder = 'flight_data/'
 
 rtlsdr.start()
 
@@ -15,16 +17,34 @@ Dat(dataFolder, {indexing: false, latest:true, sparse: true}, function(err, dat)
   dat.joinNetwork()
   console.log('Serving dat://'+dat.key.toString('hex'))
 
-  console.log('Cleaning up Legacy Files')
-  dat.archive.readdir('/', function(err, files) {
-    if(err) throw err
+  dat.archive.readFile('station.json', function(err, file) {
+    if(err) {
+      if(err.notFound) {
+        dat.archive.writeFile('station.json', JSON.stringify(station), function(err) {
+          if(err) throw err
+        })
+      }
+      else throw err
+    }
+  })
 
-    files.forEach(function(legacyFile) {
-      dat.archive.unlink(legacyFile, function(err) {
-        if(err) throw err
+  dat.archive.readdir('/' + flightFolder, function(err, files) {
+    if(err) {
+      if(err.notFound) {
+        dat.archive.mkdir(flightFolder, function(err) { if(err) throw err })
+      }
+      else throw err
+    }
+    else {
+      console.log('Cleaning up Legacy Files')
+      files.forEach(function(legacyFile) {
+        dat.archive.unlink(flightFolder + legacyFile, function(err) {
+          if(err) throw err
+        })
       })
-    })
-    console.log('%d files removed', files.length)
+      console.log('%d files removed', files.length)
+    }
+
   })
 
   setInterval(function() {
@@ -32,10 +52,10 @@ Dat(dataFolder, {indexing: false, latest:true, sparse: true}, function(err, dat)
       return aircraft.lat
     })
     .forEach(function(aircraft) {
-      dat.archive.readFile(aircraft.icao + '.json', 'utf8', (err, data) => {
-        if (err) {
-          if (err.notFound === true) {
-            dat.archive.writeFile(aircraft.icao + '.json', JSON.stringify(aircraft), function(err) {
+      dat.archive.readFile(flightFolder + aircraft.icao + '.json', 'utf8', (err, data) => {
+        if(err) {
+          if(err.notFound === true) {
+            dat.archive.writeFile(flightFolder + aircraft.icao + '.json', JSON.stringify(aircraft), function(err) {
               if(err) throw err
             })
           }
@@ -44,7 +64,7 @@ Dat(dataFolder, {indexing: false, latest:true, sparse: true}, function(err, dat)
         else {
           var prevRecord = JSON.parse(data)
           if(prevRecord.lat != aircraft.lat && prevRecord.lng != aircraft.lng) {
-            dat.archive.writeFile(aircraft.icao + '.json', JSON.stringify(aircraft), function(err) {
+            dat.archive.writeFile(flightFolder + aircraft.icao + '.json', JSON.stringify(aircraft), function(err) {
               if(err) throw err
             })
           }
@@ -54,7 +74,7 @@ Dat(dataFolder, {indexing: false, latest:true, sparse: true}, function(err, dat)
   }, 3000)
 
   storeEmitter.on('aircraftTimeout', function(icao) {
-    dat.archive.unlink(icao + '.json', function(err) {
+    dat.archive.unlink(flightFolder + icao + '.json', function(err) {
       // Expect some icao's to not be found as we arn't logging them all.
       if(err && err.status != 404) throw err
     })
