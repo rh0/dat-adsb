@@ -9,5 +9,9 @@
     "rtl-sdr": "^0.1.2"
   },
   "author": "Ryan Oles (https://twitter.com/rh0)",
-  "license": "MIT"
+  "license": "MIT",
+  "station": {
+    "name": "Unknown Station Name",
+    "description": ""
+  }
 }
