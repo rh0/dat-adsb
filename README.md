@@ -11,9 +11,9 @@ You will need an RTL-SDR dongle with the RTL2832U chip (when searching RTL-SDR m
 You will need [librtlsdr](https://github.com/steve-m/librtlsdr) on your system.
 
 ##### Mac (Homebrew)
-``
+```
 brew install librtlsdr
-``
+```
 ##### Linux
 Debian flavours:  
 ```
