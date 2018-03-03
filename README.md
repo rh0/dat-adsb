@@ -15,14 +15,14 @@ You will need [librtlsdr](https://github.com/steve-m/librtlsdr) on your system.
 brew install librtlsdr
 ``
 ##### Linux
-Debian flavours:
-``
+Debian flavours:  
+```
 apt-get-install librtlsdr-dev
-``
-Arch flavours:
-_Installing the [rx_tools package](https://aur.archlinux.org/packages/rx_tools/) from aur is the easiest._
-``
+```
+Arch flavours:  
+_Installing the [rx_tools package](https://aur.archlinux.org/packages/rx_tools/) from aur is the easiest._  
+```
 pacaur -S rx_tools
-``
+```
 
 ## Use
