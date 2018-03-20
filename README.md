@@ -1,6 +1,6 @@
 # dat-adsb :satellite:
 
-This is an SDR app that recieves ADS-B radio signals from aircraft :airplane: :helicopter: and publishes that data to a Dat archive. All of the radio and demodulation work in this app is being handled by a couple of great utilities written by [Thomas Watson](https://github.com/watson). If you are interested quickly getting up and running mapping flights, and arn't too interested in all this p2p stuff, I highly suggest checking out his excellent app [AirplaneJS](https://github.com/watson/airplanejs).
+This is an SDR app that recieves ADS-B radio signals from aircraft :airplane: :helicopter: and writes that data to a Dat archive. All of the radio and demodulation work in this app is being handled by a couple of great utilities written by [Thomas Watson](https://github.com/watson). If you are interested quickly getting up and running mapping flights, and arn't too interested in all this p2p stuff, I highly suggest checking out his excellent app [AirplaneJS](https://github.com/watson/airplanejs).
 
 ## Requirements
 ### Hardware
@@ -28,4 +28,15 @@ brew install librtlsdr
 ##### Windows
 :question::confused::question:
 
+## Use
+This application is intended to be run in the background as a service.
 
+### Station Info
+The 'station' object in `package.json` allows you to provide a name and a brief description string for your ADS-B station.
+```json
+  "station": {
+    "name": "My Cool ADS-B Station",
+    "desc": "Running a Raspberry Pi with a generic RTL-SDR dongle using a simple dipole antenna in an east facing window."
+  }
+```
+This information (along with some stats on the radio) will be published in the root of the dat archive in the `station.json` file.
