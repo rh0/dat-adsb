@@ -36,7 +36,7 @@ The 'station' object in `package.json` allows you to provide a name and a brief 
 ```json
   "station": {
     "name": "My Cool ADS-B Station",
-    "desc": "Running a Raspberry Pi with a generic RTL-SDR dongle using a simple dipole antenna in an east facing window."
+    "desc": "Running a Raspberry Pi using a simple dipole antenna."
   }
 ```
 This information (along with some stats on the radio) will be published in the root of the dat archive in the `station.json` file.
