@@ -29,7 +29,16 @@ brew install librtlsdr
 :question::confused::question:
 
 ## Use
-This application is intended to be run in the background as a service.
+This application is intended to be run in the background as a service.  However initially it is helpful to run this application manually. This allows you to be sure everything is working correctly, as well as allowing you to see the dat key the data is published to (although you can find this later too).
+```
+Found Rafael Micro R820T tuner
+Provisioning Radio...
+Max available gain is: 49.6
+Setting gain to: 49.6
+Gain reported by device: 49.6
+Exact sample rate is: 2000000.052982 Hz
+Serving dat://879a67f30e8ccd117c731c9eb4d7f45a8200bcc58bffa20c77855e3980ecaf72
+```
 
 ### Station Info
 The 'station' object in `package.json` allows you to provide a name and a brief description string for your ADS-B station.
